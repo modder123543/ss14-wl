@@ -170,12 +170,11 @@
   - type: Rootable
   #WL-Changes: Languages start
   - type: Languages
-    speaking:
-      - Translate
-      - RootSpeak
-    understood:
-      - Translate
-      - RootSpeak
+    list:
+    - language: Translate
+      languageLevel: 4
+    - language: RootSpeak
+      languageLevel: 4
     specieLanguage: RootSpeak
   #WL-Changes: Languages end
 

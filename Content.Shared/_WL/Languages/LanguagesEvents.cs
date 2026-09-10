@@ -1,3 +1,4 @@
+using Content.Shared._WL.Languages.Components.List;
 using Content.Shared.DoAfter;
 using Robust.Shared.Serialization;
 using Robust.Shared.Prototypes;
@@ -52,15 +53,18 @@ public sealed partial class LanguagesSyncEvent : EntityEventArgs
 {
     public NetEntity Entity { get; }
 
-    public List<ProtoId<LanguagePrototype>> Speaking { get; }
+    public List<LanguagesList> List { get; }
 
-    public List<ProtoId<LanguagePrototype>> Understood { get; }
+    public ProtoId<LanguagePrototype> Language { get; }
 
-    public LanguagesSyncEvent(NetEntity entity, List<ProtoId<LanguagePrototype>> speaking, List<ProtoId<LanguagePrototype>> understood)
+    public int LanguageLevel { get; }
+
+    public LanguagesSyncEvent(
+        NetEntity entity,
+        List<LanguagesList> list)
     {
         Entity = entity;
-        Speaking = speaking;
-        Understood = understood;
+        List = list;
     }
 }
 
@@ -69,15 +73,18 @@ public sealed partial class LanguageSyncRequestEvent : EntityEventArgs
 {
     public NetEntity Entity { get; }
 
-    public List<ProtoId<LanguagePrototype>> Speaking { get; }
+    public List<LanguagesList> List { get; }
 
-    public List<ProtoId<LanguagePrototype>> Understood { get; }
+    public ProtoId<LanguagePrototype> Language { get; }
 
-    public LanguageSyncRequestEvent(NetEntity entity, List<ProtoId<LanguagePrototype>> speaking, List<ProtoId<LanguagePrototype>> understood)
+    public int LanguageLevel { get; }
+
+    public LanguageSyncRequestEvent(NetEntity entity, ProtoId<LanguagePrototype> language, int languageLevel, List<LanguagesList> list)
     {
         Entity = entity;
-        Speaking = speaking;
-        Understood = understood;
+        Language = language;
+        LanguageLevel = languageLevel;
+        List = list;
     }
 }
 

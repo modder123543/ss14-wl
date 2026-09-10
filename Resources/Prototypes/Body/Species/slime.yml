@@ -184,12 +184,11 @@
     maxSaturation: 15
   #WL-Changes: Languages start
   - type: Languages
-    speaking:
-      - Translate
-      - Slimish
-    understood:
-      - Translate
-      - Slimish
+    list:
+    - language: Translate
+      languageLevel: 4
+    - language: Slimish
+      languageLevel: 4
     specieLanguage: Slimish
   #WL-Changes: Languages end
 

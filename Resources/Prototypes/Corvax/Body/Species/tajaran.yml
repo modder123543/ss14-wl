@@ -157,16 +157,13 @@
         Asphyxiation: -2.0
   - type: Wagging
   - type: HairballSpitter # WL-Changes
-  # WL-Changes: Languages
+  #WL-Changes: Languages start
   - type: Languages
-    speaking:
-      - Translate
-      - SikTair
-    understood:
-      - Translate
-      - SikTair
-    specieLanguage: SikTair
-  # WL-Changes: Languages
+    list:
+    - language: Translate
+      languageLevel: 4
+    specieLanguage: Translate
+  #WL-Changes: Languages end
 
 - type: entity
   parent: OrganBase

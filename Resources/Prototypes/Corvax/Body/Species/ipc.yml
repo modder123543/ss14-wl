@@ -272,12 +272,11 @@
     thermalRegulationTemperatureThreshold: 2
   #WL-Changes: Languages start
   - type: Languages
-    speaking:
-      - Translate
-      - Ternary
-    understood:
-      - Translate
-      - Ternary
+    list:
+    - language: Translate
+      languageLevel: 4
+    - language: Ternary
+      languageLevel: 4
     specieLanguage: Ternary
   #WL-Changes: Languages end
   # WL-Midi-Start
