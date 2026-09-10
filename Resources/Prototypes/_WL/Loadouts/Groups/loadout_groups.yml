@@ -83,6 +83,7 @@
   - TiePurple
   - TiePink
   - TieRainbow
+  - DetectiveTie
   - FacescarfRed
   - FacescarfGreen
   - FacescarfGrey
@@ -100,26 +101,24 @@
   - Photo
 
 - type: loadoutGroup
-  id: FormalUniform
-  name: loadout-group-corp-uniform
+  id: FormInventory
+  name: loadout-group-form-inventory
+  minLimit: 0
+  maxLimit: 0
   loadouts:
-  - DetectiveJumpsuit
-  - DetectiveJumpskirt
-  - NoirJumpsuit
-  - NoirJumpskirt
-  - LibrarianJumpsuit
-  - LibrarianJumpskirt
-  - CuratorJumpsuit
-  - CuratorJumpskirt
-  - LawyerJumpsuit
-  - LawyerJumpskirt
-  - LawyerJumpsuitBlue
-  - LawyerJumpskirtBlue
-  - LawyerJumpsuitPurple
-  - LawyerJumpskirtPurple
-  - LawyerJumpsuitRed
-  - LawyerJumpskirtRed
-  - LawyerJumpsuitGood
-  - LawyerJumpskirtGood
-  - ReporterJumpsuit
-  - JournalistJumpsuit
+  - BeretPilotAurora
+  - LuxuryPenSyndiCarp
+  - CowboyHatAurora
+  - FlippoLighterComrade
+  - FlippoLighterWhitley
+  - BeretQMRellimo
+  - UniformBrigmedicBambanater
+  - ViolinInstrumentDanger
+  - UniformScientistRiki
+  - HatTophatSrochnik
+  - NeckPendantCL_w
+  - CoatLabCmoVissent
+  - EyesGlassesReArt
+  - LawyerClipboardSkirgan
+  - WristwatchGoldFreealeq
+  - HeadsetTacticScience

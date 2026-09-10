@@ -7,8 +7,6 @@ using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.XAML;
-using Robust.Shared.IoC;
-using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
@@ -23,6 +21,7 @@ public sealed partial class RecordsTab : Control
     public Action<string>? OnGeneralRecordNameChanged;
     public Action<string>? OnGeneralRecordAgeChanged;
     public Action<OptionButton.ItemSelectedEventArgs>? OnGeneralRecordConfederationChanged;
+    public Action<OptionButton.ItemSelectedEventArgs>? OnBrainSourceChanged;
     public Action<string>? OnGeneralRecordCountryChanged;
 
     private readonly List<EducationEntryControls> _educationEntries = new();
@@ -33,6 +32,7 @@ public sealed partial class RecordsTab : Control
     private string _speciesDisplay = string.Empty;
     private string _sexDisplay = string.Empty;
     private string _confederationDisplay = string.Empty;
+    private string _brainSourceDisplay = string.Empty;
     private string _medicalStorage = string.Empty;
     private string _securityStorage = string.Empty;
     private string _employmentStorage = string.Empty;
@@ -67,6 +67,11 @@ public sealed partial class RecordsTab : Control
         MedicalDnr.OnItemSelected += args =>
         {
             MedicalDnr.SelectId(args.Id);
+            EmitMedical();
+        };
+        BrainSourceButton.OnItemSelected += args =>
+        {
+            OnBrainSourceChanged?.Invoke(args);
             EmitMedical();
         };
 
@@ -134,6 +139,11 @@ public sealed partial class RecordsTab : Control
             OnGeneralRecordConfederationChanged?.Invoke(args);
             UpdatePreview();
         };
+        BrainSourceButton.OnItemSelected += args =>
+        {
+            OnBrainSourceChanged?.Invoke(args);
+            UpdatePreview();
+        };
         RecordTabs.OnTabChanged += _ => UpdatePreview();
         PreviewButton.OnPressed += _ => OpenPreview();
         OnResized += UpdateEducationLayout;
@@ -174,6 +184,7 @@ public sealed partial class RecordsTab : Control
         string speciesDisplay,
         string sexDisplay,
         string confederationDisplay,
+        string brainSourceDisplay,
         string fullName,
         string country,
         string storedDateOfBirth,
@@ -186,6 +197,7 @@ public sealed partial class RecordsTab : Control
         _speciesDisplay = speciesDisplay;
         _sexDisplay = sexDisplay;
         _confederationDisplay = confederationDisplay;
+        _brainSourceDisplay = brainSourceDisplay;
         _height = height;
         _medicalStorage = medicalStorage;
         _securityStorage = securityStorage;
@@ -206,6 +218,8 @@ public sealed partial class RecordsTab : Control
         BirthDateLabel.Text = Loc.GetString(manufactured
             ? "records-date-of-manufacture-edit"
             : "records-date-of-birth-edit");
+        BrainSourceLabel.Visible = species is "Android";
+        BrainSourceButton.Visible = species is "Android";
         _updating = false;
         UpdatePreview();
         UpdateEducationLayout();
@@ -304,7 +318,7 @@ public sealed partial class RecordsTab : Control
         SecurityResidenceDetails.Text = residence.Details;
         UpdateResidenceCustomVisibility();
         SecurityFeatures.Text = record.IdentifyingFeatures;
-        SecurityMaritalStatus.SelectId((int) record.MaritalStatus);
+        SecurityMaritalStatus.SelectId((int)record.MaritalStatus);
         SecurityRelatives.Text = record.CloseRelatives;
         SecurityEmergencyContact.Text = record.EmergencyContact;
         SetText(SecurityPermits, record.Permits);
@@ -324,7 +338,7 @@ public sealed partial class RecordsTab : Control
         foreach (var education in record.Education)
             AddEducationEntry(education, false);
 
-        EmploymentAcademicTitle.SelectId((int) record.AcademicTitle);
+        EmploymentAcademicTitle.SelectId((int)record.AcademicTitle);
         EmploymentAcademicTitleField.Text = record.AcademicTitleField;
         EmploymentAcademicTitleDate.SetText(record.AcademicTitleDate);
         UpdateAcademicTitleVisibility(false);
@@ -374,7 +388,7 @@ public sealed partial class RecordsTab : Control
                 Details = SecurityResidenceDetails.Text,
             }),
             IdentifyingFeatures = SecurityFeatures.Text,
-            MaritalStatus = (RecordMaritalStatus) SecurityMaritalStatus.SelectedId,
+            MaritalStatus = (RecordMaritalStatus)SecurityMaritalStatus.SelectedId,
             CloseRelatives = SecurityRelatives.Text,
             EmergencyContact = SecurityEmergencyContact.Text,
             Permits = GetText(SecurityPermits),
@@ -427,10 +441,10 @@ public sealed partial class RecordsTab : Control
         if (_updating)
             return;
 
-        var hasAcademicTitle = EmploymentAcademicTitle.SelectedId != (int) RecordAcademicTitle.NotApplicable;
+        var hasAcademicTitle = EmploymentAcademicTitle.SelectedId != (int)RecordAcademicTitle.NotApplicable;
         var record = new EmploymentRecordData
         {
-            AcademicTitle = (RecordAcademicTitle) EmploymentAcademicTitle.SelectedId,
+            AcademicTitle = (RecordAcademicTitle)EmploymentAcademicTitle.SelectedId,
             AcademicTitleField = hasAcademicTitle ? EmploymentAcademicTitleField.Text : string.Empty,
             AcademicTitleDate = hasAcademicTitle ? EmploymentAcademicTitleDate.Text : string.Empty,
             Licenses = GetText(EmploymentLicenses),
@@ -446,7 +460,7 @@ public sealed partial class RecordsTab : Control
                 Specialty = entry.Specialty.Text,
                 SpecialtyGroup = entry.SpecialtyGroupValues[entry.SpecialtyGroup.SelectedId],
                 SpecialtySubgroup = entry.SpecialtySubgroupValues[entry.SpecialtySubgroup.SelectedId],
-                Degree = (RecordAcademicDegree) entry.Degree.SelectedId,
+                Degree = (RecordAcademicDegree)entry.Degree.SelectedId,
                 Institution = entry.Institution.Text,
                 DiplomaDate = entry.DiplomaDate.Text,
             });
@@ -477,7 +491,7 @@ public sealed partial class RecordsTab : Control
 
     private void UpdateAcademicTitleVisibility(bool clearHiddenValues)
     {
-        var visible = EmploymentAcademicTitle.SelectedId != (int) RecordAcademicTitle.NotApplicable;
+        var visible = EmploymentAcademicTitle.SelectedId != (int)RecordAcademicTitle.NotApplicable;
         AcademicTitleFieldContainer.Visible = visible;
         AcademicTitleDateContainer.Visible = visible;
 
@@ -574,7 +588,7 @@ public sealed partial class RecordsTab : Control
         PopulateSpecialtySubgroups(record.SpecialtySubgroup);
         var degree = new RecordOptionButton { HorizontalExpand = true, MinWidth = 230, MaxWidth = 380 };
         PopulateEnumOptions(degree, Enum.GetValues<RecordAcademicDegree>(), "records-degree");
-        degree.SelectId((int) record.Degree);
+        degree.SelectId((int)record.Degree);
         var institution = new LineEdit { Text = record.Institution, HorizontalExpand = true, MinWidth = 230 };
         var diplomaDate = new RecordDateEdit { HorizontalExpand = true, MinWidth = 230 };
         diplomaDate.SetText(record.DiplomaDate);
@@ -805,6 +819,7 @@ public sealed partial class RecordsTab : Control
             $"{_height} {Loc.GetString("records-height-unit-centimeters")}",
             noData,
             ValueOr(_confederationDisplay, noData),
+            ValueOr(_brainSourceDisplay, noData),
             ValueOr(CountryEdit.Text, noData));
 
         _previewWindow.SetRecords(

@@ -25,13 +25,26 @@ public sealed partial class LogProbeCartridgeComponent : Component
     [DataField, AutoNetworkedField]
     public List<PulledAccessLog> PulledAccessLogs = new();
 
-    //WL-Changes-NanoChat-Start
+    // WL-Changes-NanoChat-Start
     /// <summary>
     /// NanoChat data pulled from the last scanned ID card, if any.
     /// </summary>
     [DataField]
     public NanoChatData? NanoChat;
-    //WL-Changes-NanoChat-End
+
+    /// <summary>
+    /// Maximum number of NanoChat messages sent to the LogProbe UI in one state update.
+    /// The complete scan remains available on the server for printing.
+    /// </summary>
+    [DataField]
+    public int NanoChatUiMessageLimit = 250;
+
+    /// <summary>
+    /// Maximum number of recent messages shown for one NanoChat conversation in LogProbe.
+    /// </summary>
+    [DataField]
+    public int NanoChatUiMessagesPerConversation = 25;
+    // WL-Changes-NanoChat-End
 
     /// <summary>
     /// The sound to make when we scan something with access
