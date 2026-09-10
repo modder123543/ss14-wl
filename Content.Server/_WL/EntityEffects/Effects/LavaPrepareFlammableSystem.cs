@@ -33,7 +33,9 @@ public sealed partial class LavaPrepareFlammableEntityEffectSystem
         var uid = entity.Owner;
 
         // Blacklist tags
-        if (_tag.HasAnyTag(uid, "HighRiskItem", "FireResistant"))
+        const string highRiskItemTag = "HighRiskItem";
+        const string fireResistantTag = "FireResistant";
+        if (_tag.HasAnyTag(uid, highRiskItemTag, fireResistantTag))
             return;
 
         if (_entMan.HasComponent<FlammableComponent>(uid))
