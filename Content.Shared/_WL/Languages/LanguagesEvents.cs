@@ -3,7 +3,6 @@ using Content.Shared.DoAfter;
 using Robust.Shared.Serialization;
 using Robust.Shared.Prototypes;
 
-
 namespace Content.Shared._WL.Languages;
 
 /// <summary>
@@ -55,10 +54,6 @@ public sealed partial class LanguagesSyncEvent : EntityEventArgs
 
     public List<LanguagesList> List { get; }
 
-    public ProtoId<LanguagePrototype> Language { get; }
-
-    public int LanguageLevel { get; }
-
     public LanguagesSyncEvent(
         NetEntity entity,
         List<LanguagesList> list)
@@ -79,7 +74,11 @@ public sealed partial class LanguageSyncRequestEvent : EntityEventArgs
 
     public int LanguageLevel { get; }
 
-    public LanguageSyncRequestEvent(NetEntity entity, ProtoId<LanguagePrototype> language, int languageLevel, List<LanguagesList> list)
+    public LanguageSyncRequestEvent(
+        NetEntity entity,
+        ProtoId<LanguagePrototype> language,
+        int languageLevel,
+        List<LanguagesList> list)
     {
         Entity = entity;
         Language = language;
