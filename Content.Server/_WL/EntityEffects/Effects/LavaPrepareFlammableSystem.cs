@@ -22,7 +22,6 @@ namespace Content.Server._WL.EntityEffects.Effects;
 public sealed partial class LavaPrepareFlammableEntityEffectSystem
     : EntityEffectSystem<ItemComponent, LavaPrepareFlammable>
 {
-    [Dependency] private IEntityManager _entMan = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private TagSystem _tag = default!;
 
@@ -38,17 +37,17 @@ public sealed partial class LavaPrepareFlammableEntityEffectSystem
         if (_tag.HasAnyTag(uid, highRiskItemTag, fireResistantTag))
             return;
 
-        if (_entMan.HasComponent<FlammableComponent>(uid))
+        if (HasComp<FlammableComponent>(uid))
             return;
 
         // AppearanceComponent block
-        if (!_entMan.HasComponent<AppearanceComponent>(uid))
-            _entMan.EnsureComponent<AppearanceComponent>(uid);
+        if (!HasComp<AppearanceComponent>(uid))
+            EnsureComp<AppearanceComponent>(uid);
 
         // ReactiveComponent block
-        if (!_entMan.HasComponent<ReactiveComponent>(uid))
+        if (!HasComp<ReactiveComponent>(uid))
         {
-            var reactive = _entMan.EnsureComponent<ReactiveComponent>(uid);
+            var reactive = EnsureComp<ReactiveComponent>(uid);
 
             reactive.ReactiveGroups ??= new Dictionary<string, HashSet<ReactionMethod>>();
 
@@ -59,19 +58,19 @@ public sealed partial class LavaPrepareFlammableEntityEffectSystem
         }
 
         // InjurableComponent block
-        if (!_entMan.HasComponent<InjurableComponent>(uid))
-            _entMan.EnsureComponent<InjurableComponent>(uid);
+        if (!HasComp<InjurableComponent>(uid))
+            EnsureComp<InjurableComponent>(uid);
 
         // DamageableComponent block
-        if (!_entMan.HasComponent<DamageableComponent>(uid))
+        if (!HasComp<DamageableComponent>(uid))
         {
-            _entMan.EnsureComponent<DamageableComponent>(uid);
-            _entMan.EnsureComponent<DamageableComponent>(uid, out var damageable);
+            EnsureComp<DamageableComponent>(uid);
+            EnsureComp<DamageableComponent>(uid, out var damageable);
             _damageable.SetDamageModifierSetId((uid, damageable), new ProtoId<DamageModifierSetPrototype>("Wood"));
         }
 
         // FlammableComponent block
-        var flammable = _entMan.EnsureComponent<FlammableComponent>(uid);
+        var flammable = EnsureComp<FlammableComponent>(uid);
 
         flammable.AlwaysCombustible = true;
         flammable.CanExtinguish = true;
@@ -86,9 +85,9 @@ public sealed partial class LavaPrepareFlammableEntityEffectSystem
         flammable.Damage = fireDamage;
 
         // DestructibleComponent block
-        if (!_entMan.HasComponent<DestructibleComponent>(uid))
+        if (!HasComp<DestructibleComponent>(uid))
         {
-            var destructible = _entMan.EnsureComponent<DestructibleComponent>(uid);
+            var destructible = EnsureComp<DestructibleComponent>(uid);
             destructible.Thresholds ??= new List<DamageThreshold>();
             destructible.Thresholds.Add(new DamageThreshold
             {
