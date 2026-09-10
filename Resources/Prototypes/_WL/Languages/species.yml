@@ -646,37 +646,6 @@
       levelModifiers: [0, -1, -1, 0, 0]
 
 - type: language
-  id: Urhas
-  name: language-urhs
-  description: language-urhs-desc
-  color: '#470806'
-  keylang: 'х'
-  obfuscation:
-    !type:ByCharReplacementObfuscation
-    replacement:
-    - r
-    - s
-    - h
-    - k
-    - t
-    - a
-    - ss
-    - so
-    - se
-    - h
-    - he
-    - ro
-    - ta
-    - o
-    - e
-    - u
-    - k
-    - ka
-  icon:
-    sprite: /Textures/_WL/Interface/Languages/languages.rsi
-    state: urhs
-
-- type: language
   id: Yangyu
   name: language-yangyu
   description: language-yangyu-desc
@@ -902,37 +871,33 @@
   id: SintaUrssa
   name: language-urssa
   description: language-urssa-desc
-  color: '#CCE72C'
-  keylang: 'u'
+  color: '#470806'
+  keylang: 'x'
   obfuscation:
     !type:ByCharReplacementObfuscation
     maxlength: 6
     replacement:
-    - we
+    - r
     - s
-    - ss
-    - de
-    - re
-    - zo
-    - hr
-    - su
-    - ky
-    - s
-    - w
-    - h
-    - h
-    - weh
-    - l
-    - rr
-    - o
-    - f
     - h
     - k
-    - s
-    - r
+    - t
+    - a
+    - ss
+    - so
+    - se
+    - h
+    - he
+    - ro
+    - ta
+    - o
+    - e
+    - u
+    - k
+    - ka
   icon:
     sprite: /Textures/_WL/Interface/Languages/languages.rsi
-    state: unati
+    state: urhs
   levelCosts: [0, 1, 2, 1, 2]
   speciesModifiers:
     Arachnid:

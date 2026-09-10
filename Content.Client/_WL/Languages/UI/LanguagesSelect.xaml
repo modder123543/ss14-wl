@@ -34,10 +34,10 @@
 
                 <!-- Кнопки уровней -->
                 <BoxContainer Orientation="Horizontal" Margin="0 4 0 0">
-                    <Button Name="Level1Button" Margin="0 0 4 0" MinSize="110 30"/>
-                    <Button Name="Level2Button" Margin="0 0 4 0" MinSize="110 30"/>
-                    <Button Name="Level3Button" Margin="0 0 4 0" MinSize="110 30"/>
-                    <Button Name="Level4Button" MinSize="110 30"/>
+                    <Button Name="Level1Button" Margin="0 0 4 0" MinSize="110 30" ToolTip="{Loc languages-level-1-tooltip}"/>
+                    <Button Name="Level2Button" Margin="0 0 4 0" MinSize="110 30" ToolTip="{Loc languages-level-2-tooltip}"/>
+                    <Button Name="Level3Button" Margin="0 0 4 0" MinSize="110 30" ToolTip="{Loc languages-level-3-tooltip}"/>
+                    <Button Name="Level4Button" MinSize="110 30" ToolTip="{Loc languages-level-4-tooltip}"/>
                 </BoxContainer>
             </BoxContainer>
         </BoxContainer>

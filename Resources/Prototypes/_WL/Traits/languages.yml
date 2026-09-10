@@ -2,7 +2,7 @@
 - type: traitCategory
   id: Languages
   name: trait-category-languages
-  maxTraitPoints: 2
+  maxTraitPoints: 10
   hidden: true
 
 - type: trait
@@ -19,20 +19,6 @@
       specieLanguage: true
 
 - type: trait
-  id: OldEarth
-  name: language-oldearth
-  description: language-oldearth-desc
-  category: Languages
-  cost: 3
-  whitelist:
-    components:
-      - Languages
-  components:
-    - type: ModifyLanguages
-      languages:
-        - OldEarth
-
-- type: trait
   id: SintaUnati
   name: language-unati
   description: language-unati-desc
@@ -45,20 +31,6 @@
     - type: ModifyLanguages
       languages:
         - SintaUnati
-
-- type: trait
-  id: Urhas
-  name: language-urhs
-  description: language-urhs-desc
-  category: Languages
-  cost: 2
-  whitelist:
-    components:
-      - Languages
-  components:
-    - type: ModifyLanguages
-      languages:
-        - Urhas
 
 - type: trait
   id: TopTranslate
