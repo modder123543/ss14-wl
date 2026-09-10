@@ -30,17 +30,11 @@ public record struct RadioLanguageCheckEvent(string Message, EntityUid RadioSour
 }
 
 [Serializable, NetSerializable]
-public sealed partial class LanguageChangeEvent : EntityEventArgs
+public sealed partial class LanguageChangeEvent(NetEntity entity, ProtoId<LanguagePrototype> protoId) : EntityEventArgs
 {
-    public NetEntity Entity { get; }
+    public NetEntity Entity { get; } = entity;
 
-    public ProtoId<LanguagePrototype> Language { get; }
-
-    public LanguageChangeEvent(NetEntity entity, ProtoId<LanguagePrototype> protoId)
-    {
-        Entity = entity;
-        Language = protoId;
-    }
+    public ProtoId<LanguagePrototype> Language { get; } = protoId;
 }
 
 [Serializable, NetSerializable]
@@ -49,7 +43,10 @@ public sealed partial class AfterLanguageChangeEvent : SimpleDoAfterEvent
 }
 
 [Serializable, NetSerializable]
-public sealed partial class LanguagesSyncEvent : EntityEventArgs
+public sealed partial class LanguagesSyncEvent(
+        NetEntity entity,
+        List<ProtoId<LanguagePrototype>> speaking,
+        List<ProtoId<LanguagePrototype>> understood) : EntityEventArgs
 {
     public NetEntity Entity { get; }
 
@@ -69,9 +66,12 @@ public sealed partial class LanguagesSyncEvent : EntityEventArgs
 }
 
 [Serializable, NetSerializable]
-public sealed partial class LanguageSyncRequestEvent : EntityEventArgs
+public sealed partial class LanguageSyncRequestEvent(
+        NetEntity entity,
+        List<ProtoId<LanguagePrototype>> speaking,
+        List<ProtoId<LanguagePrototype>> understood) : EntityEventArgs
 {
-    public NetEntity Entity { get; }
+    public NetEntity Entity { get; } = entity;
 
     public List<LanguagesList> List { get; }
 
@@ -89,16 +89,12 @@ public sealed partial class LanguageSyncRequestEvent : EntityEventArgs
 }
 
 [Serializable, NetSerializable]
-public sealed class LanguageSoundEvent : EntityEventArgs
+public sealed class LanguageSoundEvent(
+        ProtoId<LanguagePrototype> language,
+        NetEntity? sourceUid = null,
+        bool isWhisper = false) : EntityEventArgs
 {
-    public ProtoId<LanguagePrototype> Language { get; }
-    public NetEntity? SourceUid { get; }
-    public bool IsWhisper { get; }
-
-    public LanguageSoundEvent(ProtoId<LanguagePrototype> language, NetEntity? sourceUid = null, bool isWhisper = false)
-    {
-        Language = language;
-        SourceUid = sourceUid;
-        IsWhisper = isWhisper;
-    }
+    public ProtoId<LanguagePrototype> Language { get; } = language;
+    public NetEntity? SourceUid { get; } = sourceUid;
+    public bool IsWhisper { get; } = isWhisper;
 }
