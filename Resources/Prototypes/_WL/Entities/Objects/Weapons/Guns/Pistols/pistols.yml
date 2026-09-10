@@ -64,3 +64,14 @@
           tags:
             - MagazinePistol
         whitelistFailPopup: gun-magazine-whitelist-fail
+      gun_chamber:
+        name: Chamber
+        priority: 1
+        whitelist:
+          tags:
+            - CartridgePistol
+  - type: Tag
+    tags:
+    - Sidearm
+    - SidearmNT
+    - TC12

@@ -133,7 +133,7 @@
     baseDecayRate: 0.15
   - type: ContentEye
   - type: Speech
-    allowedEmotes: ['Purr']
+    allowedEmotes: ['Purr', 'Meow', 'Tajarahiss']
   - type: Vocal
     emoteSounds: MaleTajaran
   - type: GrowlingAccent
@@ -156,7 +156,6 @@
       types:
         Asphyxiation: -2.0
   - type: Wagging
-  - type: HairballSpitter # WL-Changes
   # WL-Changes: Languages
   - type: Languages
     speaking:
