@@ -197,7 +197,8 @@ public sealed partial class LanguagesTab : Control
         if (_profile == null || _prototypeManager == null)
             return;
 
-        if (!_prototypeManager.TryIndex<TraitCategoryPrototype>("Languages", out var category))
+        const string categoryId = "Languages";
+        if (!_prototypeManager.TryIndex<TraitCategoryPrototype>(categoryId, out var category))
             return;
 
         if (category.MaxTraitPoints < 0)
