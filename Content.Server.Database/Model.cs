@@ -482,7 +482,6 @@ namespace Content.Server.Database
         public int ProfileId { get; set; }
 
         public string TraitName { get; set; } = null!;
-        public int LanguageLevel { get; set; }
     }
 
     #region Loadouts

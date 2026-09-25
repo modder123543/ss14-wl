@@ -1,7 +1,9 @@
 using System.Linq;
+using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Server.StationEvents.Components;
-using Content.Shared.GameTicking.Components;
+﻿using Content.Shared.GameTicking.Components;
+using Content.Shared.Roles;
 using JetBrains.Annotations;
 using Robust.Shared.Random;
 
@@ -10,13 +12,13 @@ namespace Content.Server.StationEvents.Events;
 [UsedImplicitly]
 public sealed partial class BureaucraticErrorRule : StationEventSystem<BureaucraticErrorRuleComponent>
 {
-    [Dependency] private ServerStationJobsSystem _stationJobs = default!;
+    [Dependency] private StationJobsSystem _stationJobs = default!;
 
     protected override void Started(EntityUid uid, BureaucraticErrorRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
         base.Started(uid, component, gameRule, args);
 
-        if (!Station.TryGetRandomStation(out var chosenStation, HasComp<Shared.Station.Components.StationJobsComponent>))
+        if (!TryGetRandomStation(out var chosenStation, HasComp<StationJobsComponent>))
             return;
 
         var jobList = _stationJobs.GetJobs(chosenStation.Value).Keys.ToList();

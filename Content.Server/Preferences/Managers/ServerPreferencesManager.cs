@@ -110,9 +110,7 @@ namespace Content.Server.Preferences.Managers
 
             var jobs = profile.Jobs.ToDictionary(j => new ProtoId<JobPrototype>(j.JobName), j => (JobPriority) j.Priority);
             var antags = profile.Antags.Select(a => new ProtoId<AntagPrototype>(a.AntagName));
-            var traits = profile.Traits.Select(t => new ProtoId<TraitPrototype>(t.TraitName)).ToHashSet();
-
-            var languageLevels = profile.Traits.Where(t => t.LanguageLevel > 0).ToDictionary(t => new ProtoId<TraitPrototype>(t.TraitName), t => t.LanguageLevel);
+            var traits = profile.Traits.Select(t => new ProtoId<TraitPrototype>(t.TraitName));
 
             var sex = Sex.Male;
             if (Enum.TryParse<Sex>(profile.Sex, true, out var sexVal))
@@ -221,7 +219,7 @@ namespace Content.Server.Preferences.Managers
                 jobSubnames,
                 antags.ToHashSet(),
                 traits.ToHashSet(),
-                languageLevels,
+                new Dictionary<ProtoId<TraitPrototype>, int>(),
                 loadouts,
                 jobUnblockings,
                 profile.MedicalRecord, // WL-Records

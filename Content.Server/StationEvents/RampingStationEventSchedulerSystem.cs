@@ -2,7 +2,6 @@ using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Server.StationEvents.Components;
 using Content.Shared.GameTicking.Components;
-using Content.Shared.GameTicking.Rules;
 using Robust.Shared.Random;
 
 namespace Content.Server.StationEvents;
@@ -11,7 +10,7 @@ public sealed partial class RampingStationEventSchedulerSystem : GameRuleSystem<
 {
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private EventManagerSystem _event = default!;
-    [Dependency] private ServerGameTicker _gameTicker = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
 
     /// <summary>
     /// Returns the ChaosModifier which increases as round time increases to a point.
@@ -39,20 +38,28 @@ public sealed partial class RampingStationEventSchedulerSystem : GameRuleSystem<
         PickNextEventTime(uid, component);
     }
 
-    // TODO: GO THROUGH EVERY SINGLE GAME RULE AND JUST CLEAN THIS STUFF UP!!!
-    protected override void ActiveTick(EntityUid entityUid, RampingStationEventSchedulerComponent component, GameRuleComponent gameRuleComponent, float frameTime)
+    public override void Update(float frameTime)
     {
+        base.Update(frameTime);
+
         if (!_event.EventsEnabled)
             return;
 
-        if (component.TimeUntilNextEvent > 0f)
+        var query = EntityQueryEnumerator<RampingStationEventSchedulerComponent, GameRuleComponent>();
+        while (query.MoveNext(out var uid, out var scheduler, out var gameRule))
         {
-            component.TimeUntilNextEvent -= frameTime;
-            return;
-        }
+            if (!GameTicker.IsGameRuleActive(uid, gameRule))
+                continue;
 
-        PickNextEventTime(entityUid, component);
-        _event.RunRandomEvent(component.ScheduledGameRules);
+            if (scheduler.TimeUntilNextEvent > 0f)
+            {
+                scheduler.TimeUntilNextEvent -= frameTime;
+                continue;
+            }
+
+            PickNextEventTime(uid, scheduler);
+            _event.RunRandomEvent(scheduler.ScheduledGameRules);
+        }
     }
 
     /// <summary>

@@ -1,4 +1,6 @@
-using Content.Shared._WL.CartridgeLoader.Cartridges; //WL-Changes: nanochat
+﻿//WL-Changes-NanoChat-Start
+using Content.Shared._WL.CartridgeLoader.Cartridges;
+//WL-Changes-NanoChat-End
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.CartridgeLoader.Cartridges;

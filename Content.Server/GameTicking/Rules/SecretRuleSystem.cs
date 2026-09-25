@@ -1,14 +1,12 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Server.Administration.Logs;
+using Content.Server.GameTicking.Presets;
 using Content.Server.GameTicking.Rules.Components;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Random;
 using Content.Shared.CCVar;
 using Content.Shared.Database;
-using Content.Shared.GameTicking;
-using Content.Shared.GameTicking.Prototypes;
-using Content.Shared.GameTicking.Rules;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Configuration;
@@ -50,7 +48,7 @@ public sealed partial class SecretRuleSystem : GameRuleSystem<SecretRuleComponen
             if (GameTicker.IsIgnored(rule))
                 continue;
 
-            Entity<GameRuleComponent>? ruleEnt;
+            EntityUid ruleEnt;
 
             // if we're pre-round (i.e. will only be added)
             // then just add rules. if we're added in the middle of the round (or at any other point really)
@@ -60,22 +58,17 @@ public sealed partial class SecretRuleSystem : GameRuleSystem<SecretRuleComponen
             else
                 GameTicker.StartGameRule(rule, out ruleEnt);
 
-            if (ruleEnt == null)
-                continue;
-
-            component.AdditionalGameRules.Add(ruleEnt.Value);
+            component.AdditionalGameRules.Add(ruleEnt);
         }
     }
 
-    // TODO: We PROBABLY SHOULD NOT BE DOING THIS as the only time Secret ends naturally is end of round which already cleans up these rules.
-    // TODO: IN ADDITION We should end secret once it spawns its rules so we don't tick it :V or pause it?
-    protected override void Ended(Entity<SecretRuleComponent> rule, ref GameRuleEndedEvent args)
+    protected override void Ended(EntityUid uid, SecretRuleComponent component, GameRuleComponent gameRule, GameRuleEndedEvent args)
     {
-        base.Ended(rule, ref args);
+        base.Ended(uid, component, gameRule, args);
 
-        foreach (var gameRule in rule.Comp.AdditionalGameRules)
+        foreach (var rule in component.AdditionalGameRules)
         {
-            GameTicker.EndGameRule(gameRule);
+            GameTicker.EndGameRule(rule);
         }
     }
 

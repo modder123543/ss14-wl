@@ -15,7 +15,7 @@ public sealed partial class RandomEntityStorageSpawnRule : StationEventSystem<Ra
     {
         base.Started(uid, comp, gameRule, args);
 
-        if (!Station.TryGetRandomStation(out var station))
+        if (!TryGetRandomStation(out var station))
             return;
 
         var validLockers = new List<(EntityUid, EntityStorageComponent)>();
@@ -24,7 +24,7 @@ public sealed partial class RandomEntityStorageSpawnRule : StationEventSystem<Ra
         var query = EntityQueryEnumerator<EntityStorageComponent, TransformComponent>();
         while (query.MoveNext(out var ent, out var storage, out var xform))
         {
-            if (Station.GetOwningStation(ent, xform) != station.Value.Owner)
+            if (StationSystem.GetOwningStation(ent, xform) != station)
                 continue;
 
             if (!_entityStorage.CanInsert(spawn, ent, storage))

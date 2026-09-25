@@ -1,5 +1,5 @@
 using System.Linq;
-using Content.Shared.GameTicking;
+using Content.Server.GameTicking;
 using Robust.Shared.Network;
 
 namespace Content.Server.Administration.Systems;

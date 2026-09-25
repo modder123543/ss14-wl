@@ -19,14 +19,14 @@ public sealed partial class RandomSentienceRule : StationEventSystem<RandomSenti
 
     protected override void Started(EntityUid uid, RandomSentienceRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
-        if (!Station.TryGetRandomStation(out var station))
+        if (!TryGetRandomStation(out var station))
             return;
 
         var targetList = new List<Entity<SentienceTargetComponent>>();
         var query = EntityQueryEnumerator<SentienceTargetComponent, TransformComponent>();
         while (query.MoveNext(out var targetUid, out var target, out var xform))
         {
-            if (Station.GetOwningStation(targetUid, xform) != station.Value.Owner)
+            if (StationSystem.GetOwningStation(targetUid, xform) != station)
                 continue;
 
             targetList.Add((targetUid, target));

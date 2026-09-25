@@ -79,8 +79,8 @@
     - MedkitCombatFilled # End of first line
     - GrenadeShrapnel
     - EmpGrenade
-    - Truncheon
     belt:
+    - Truncheon
     - Handcuffs
     - Handcuffs
     - CrowbarRed
@@ -370,21 +370,23 @@
     - GrenadeBlast
     - GrenadeBlast
     - GrenadeBlast
-    - GrenadeFlash
-    - GrenadeFlash # End of first line
-    - GrenadeEMP
-    - GrenadeEMP
-    - GrenadeEMP
     - MagazinePistol
-    - Truncheon
+    - MedkitCombatFilled # End of first line
+    - GrenadeEMP
+    - GrenadeEMP
+    - GrenadeEMP
+    - GrenadeFlash
+    - GrenadeFlash
+    - GrenadeFlash
+    - MagazinePistol
     belt:
+    - Truncheon
+    - Handcuffs
     - Handcuffs
     - CrowbarRed
-    - EmergencyMedipen
     - WeaponPistolMk58
     - MagazinePistol
-    - MagazinePistol
-    - MedkitCombatFilled
+    - EmergencyMedipen
 
 - type: startingGear
   parent: ERTSecurityGearEVA
@@ -397,22 +399,23 @@
     - ExGrenade
     - SmokeGrenade
     - EmpGrenade
+    - HoloprojectorSecurity
     - TelescopicShield
-    - TelescopicShield # End of first line
-    - MedkitCombatFilled
+    - TelescopicShield
+    - TelescopicShield
+    - MedkitCombatFilled # End of first line
     - MagazinePistolSubMachineGunTopMounted
     - MagazinePistolSubMachineGunTopMounted
     - MagazinePistolSubMachineGunTopMounted
     - MagazinePistolSubMachineGunTopMounted
-    - Truncheon
     belt:
+    - Truncheon
     - Handcuffs
     - Handcuffs
     - CrowbarRed
     - WeaponPistolMk58
     - MagazinePistol
     - EmergencyMedipen
-    - HoloprojectorSecurity
 
 - type: startingGear
   parent: ERTSecurityGearEVA
@@ -427,11 +430,12 @@
     - BoxShotgunSlug
     - BoxShotgunIncendiary
     - MedkitCombatFilled # End of first line
+    - SmokeGrenade
     - ExGrenade
     - CableDetStack
     - BoxDetonator
-    - Truncheon
     belt:
+    - Truncheon
     - Handcuffs
     - Handcuffs
     - CrowbarRed
@@ -528,8 +532,8 @@
     - MedkitCombatFilled
     - ClothingEyesGlassesChemical
     - ChemistryBottleOmnizine
-    - Truncheon
     belt:
+    - Truncheon
     - Zipties
     - CrowbarRed
     - MagazineRifle

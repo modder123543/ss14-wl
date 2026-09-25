@@ -9,7 +9,6 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Content.Shared.EntityTable.EntitySelectors;
 using Content.Shared.EntityTable;
-using Content.Shared.GameTicking.Components;
 
 namespace Content.Server.StationEvents;
 
@@ -19,7 +18,7 @@ public sealed partial class EventManagerSystem : EntitySystem
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private EntityTableSystem _entityTable = default!;
-    [Dependency] private ServerGameTicker _gameTicker = default!;
+    [Dependency] public GameTicker GameTicker = default!;
     [Dependency] private RoundEndSystem _roundEnd = default!;
 
     public bool EventsEnabled { get; private set; }
@@ -68,7 +67,7 @@ public sealed partial class EventManagerSystem : EntitySystem
             return;
         }
 
-        _gameTicker.AddGameRule(randomLimitedEvent);
+        GameTicker.AddGameRule(randomLimitedEvent);
     }
 
     /// <summary>
@@ -106,7 +105,7 @@ public sealed partial class EventManagerSystem : EntitySystem
         playerCount ??= _playerManager.PlayerCount;
 
         // playerCount does a lock so we'll just keep the variable here
-        currentTime ??= _gameTicker.RoundDuration();
+        currentTime ??= GameTicker.RoundDuration();
 
         var totalWeight = 0f;
 
@@ -159,11 +158,11 @@ public sealed partial class EventManagerSystem : EntitySystem
         playerCount ??= _playerManager.PlayerCount;
 
         // playerCount does a lock so we'll just keep the variable here
-        currentTime ??= _gameTicker.RoundDuration();
+        currentTime ??= GameTicker.RoundDuration();
 
         foreach (var eventid in selectedEvents)
         {
-            if (_gameTicker.IsIgnored(eventid))
+            if (GameTicker.IsIgnored(eventid))
                 continue;
 
             if (!ProtoMan.Resolve(eventid, out var eventproto))
@@ -251,7 +250,7 @@ public sealed partial class EventManagerSystem : EntitySystem
         var playerCount = playerCountOverride ?? _playerManager.PlayerCount;
 
         // playerCount does a lock so we'll just keep the variable here
-        var currentTime = currentTimeOverride ?? _gameTicker.RoundDuration();
+        var currentTime = currentTimeOverride ?? GameTicker.RoundDuration();
 
         var result = new Dictionary<EntityPrototype, StationEventComponent>();
 
@@ -295,36 +294,59 @@ public sealed partial class EventManagerSystem : EntitySystem
         return allEvents;
     }
 
-    // TODO: WRITE A TEST TO ENSURE THAT IF A EVENT HAS MAX OCCURRENCES, THAT IT WILL PROPERLY CANCEL ONLY WHEN THEY'RE HIT
-    private bool CanRun(EntityPrototype prototype, StationEventComponent stationEvent, int playerCount, TimeSpan currentTime)
+    private int GetOccurrences(EntityPrototype stationEvent)
     {
-        // Do the really simple comparisons BEFORE we create an IEnumerable for GameRules :V
-        if (playerCount < stationEvent.MinimumPlayers)
-            return false;
+        return GetOccurrences(stationEvent.ID);
+    }
 
-        if (currentTime != TimeSpan.Zero && currentTime.TotalMinutes < stationEvent.EarliestStart)
-            return false;
+    private int GetOccurrences(string stationEvent)
+    {
+        return GameTicker.AllPreviousGameRules.Count(p => p.Item2 == stationEvent);
+    }
 
-        // Slightly slower if we don't care about MaxOccurrences, but that's not a huge issue in the context of the event scheduler.
-        var count = 0;
-        var lastRun = TimeSpan.Zero;
-        var ruleQuery = EntityQueryEnumerator<GameRuleComponent, MetaDataComponent>();
-        while (ruleQuery.MoveNext(out var rule, out var meta))
+    public TimeSpan TimeSinceLastEvent(EntityPrototype stationEvent)
+    {
+        foreach (var (time, rule) in GameTicker.AllPreviousGameRules.Reverse())
         {
-            if (meta.EntityPrototype?.Name != prototype.ID)
-                continue;
-
-            count++;
-            if (lastRun < rule.ActivatedAt)
-                lastRun = rule.ActivatedAt;
+            if (rule == stationEvent.ID)
+                return time;
         }
 
-        if (stationEvent.MaxOccurrences.HasValue && count >= stationEvent.MaxOccurrences.Value)
+        return TimeSpan.Zero;
+    }
+
+    private bool CanRun(EntityPrototype prototype, StationEventComponent stationEvent, int playerCount, TimeSpan currentTime)
+    {
+        if (GameTicker.IsGameRuleActive(prototype.ID))
             return false;
 
-        if (lastRun != TimeSpan.Zero && currentTime.TotalMinutes < stationEvent.ReoccurrenceDelay + lastRun.TotalMinutes)
+        if (stationEvent.MaxOccurrences.HasValue && GetOccurrences(prototype) >= stationEvent.MaxOccurrences.Value)
+        {
             return false;
+        }
 
-        return !_roundEnd.IsRoundEndRequested() || stationEvent.OccursDuringRoundEnd || _roundEnd.CanCallOrRecall();
+        if (playerCount < stationEvent.MinimumPlayers)
+        {
+            return false;
+        }
+
+        if (currentTime != TimeSpan.Zero && currentTime.TotalMinutes < stationEvent.EarliestStart)
+        {
+            return false;
+        }
+
+        var lastRun = TimeSinceLastEvent(prototype);
+        if (lastRun != TimeSpan.Zero && currentTime.TotalMinutes <
+            stationEvent.ReoccurrenceDelay + lastRun.TotalMinutes)
+        {
+            return false;
+        }
+
+        if (_roundEnd.IsRoundEndRequested() && !stationEvent.OccursDuringRoundEnd && !_roundEnd.CanCallOrRecall())
+        {
+            return false;
+        }
+
+        return true;
     }
 }

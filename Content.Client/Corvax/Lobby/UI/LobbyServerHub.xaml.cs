@@ -206,14 +206,12 @@ public sealed partial class LobbyServerHub : BoxContainer
         }
     }
 
-    private static Separator CreateDivider(bool vertical)
+    private static PanelContainer CreateDivider(bool vertical)
     {
-        return new Separator
+        return new PanelContainer
         {
-            Orientation = vertical
-                ? Separator.OrientationMode.Vertical
-                : Separator.OrientationMode.Horizontal,
-            Thickness = 1,
+            MinWidth = vertical ? 1 : 0,
+            MinHeight = vertical ? 0 : 1,
             VerticalExpand = vertical,
             HorizontalExpand = !vertical,
             Margin = vertical ? new Thickness(0, 2) : new Thickness(0),
@@ -340,7 +338,7 @@ public sealed partial class LobbyServerHub : BoxContainer
                 ServerGrid.AddChild(sectionLabel);
             }
 
-            ServerGrid.AddChild(new Separator
+            ServerGrid.AddChild(new HLine
             {
                 Thickness = 2,
                 HorizontalExpand = true,

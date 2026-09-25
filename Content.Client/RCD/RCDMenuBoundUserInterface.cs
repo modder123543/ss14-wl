@@ -75,8 +75,7 @@ public sealed partial class RCDMenuBoundUserInterface : BoundUserInterface
                 var topLevelActionOption = new RadialMenuActionOption<RCDPrototype>(HandleMenuOptionClick, prototype)
                 {
                     IconSpecifier = RadialMenuIconSpecifier.With(prototype.Sprite),
-                    ToolTip = GetTooltip(prototype),
-                    Order = prototype.MenuOrder,
+                    ToolTip = GetTooltip(prototype)
                 };
                 topLevelActions.Add(topLevelActionOption);
                 continue;
@@ -94,8 +93,7 @@ public sealed partial class RCDMenuBoundUserInterface : BoundUserInterface
             var actionOption = new RadialMenuActionOption<RCDPrototype>(HandleMenuOptionClick, prototype)
             {
                 IconSpecifier = RadialMenuIconSpecifier.With(prototype.Sprite),
-                ToolTip = GetTooltip(prototype),
-                Order = prototype.MenuOrder,
+                ToolTip = GetTooltip(prototype)
             };
             list.Add(actionOption);
         }
@@ -108,8 +106,7 @@ public sealed partial class RCDMenuBoundUserInterface : BoundUserInterface
             models[i] = new RadialMenuNestedLayerOption(list)
             {
                 IconSpecifier = RadialMenuIconSpecifier.With(groupInfo.Sprite),
-                ToolTip = Loc.GetString(groupInfo.Tooltip),
-                Order = i,
+                ToolTip = Loc.GetString(groupInfo.Tooltip)
             };
             i++;
         }

@@ -297,7 +297,7 @@
 
 # region Firelocks
 - type: construction
-  parent: BaseStructureFullTileDirectional
+  parent: BaseStructureFullTile
   id: Firelock
   graph: Firelock
   targetNode: Firelock
@@ -312,6 +312,7 @@
   id: FirelockEdge
   name: construction-recipe-firelock-edge
   targetNode: FirelockEdge
+  canRotate: true
 # endregion Firelocks
 
 # region Shutters
@@ -483,7 +484,7 @@
 
 # region Airlocks
 - type: construction
-  parent: BaseStructureFullTileDirectional
+  parent: BaseStructureFullTile
   id: Airlock
   graph: Airlock
   targetNode: airlock
@@ -494,9 +495,10 @@
   targetNode: glassAirlock
 
 - type: construction
-  parent: Airlock
+  parent: BaseStructureFullTileDirectional
   id: AirlockShuttle
   graph: AirlockShuttle
+  targetNode: airlock
 
 - type: construction
   parent: AirlockShuttle
@@ -511,6 +513,7 @@
   id: Windoor
   graph: Windoor
   targetNode: windoor
+
 # endregion Windoors
 
 # region Lighting

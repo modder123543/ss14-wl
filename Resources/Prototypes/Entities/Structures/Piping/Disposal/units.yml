@@ -226,7 +226,6 @@
     deviceNetId: Wired
     receiveFrequencyId: MailingUnit
     transmitFrequencyId: MailingUnit
-  - type: DeviceNetworkRequiresPower
   - type: WiredNetworkConnection
   - type: Configuration
     config:

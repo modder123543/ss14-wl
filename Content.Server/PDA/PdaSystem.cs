@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Server.Access.Systems;
+using Content.Server.CartridgeLoader;
 using Content.Server.Chat.Managers;
 using Content.Server.Instruments;
 using Content.Server.PDA.Ringer;
@@ -8,6 +9,7 @@ using Content.Server.RoundEnd; // WL-Changes: ETA in PDA
 using Content.Server.Shuttles.Systems; // WL-Changes: ETA in PDA
 using Content.Server.Station.Systems;
 using Content.Server.Store.Systems;
+using Content.Server.Traitor.Uplink;
 using Content.Shared.Access.Components;
 using Content.Shared.AlertLevel;
 using Content.Shared.CartridgeLoader;
@@ -36,7 +38,7 @@ namespace Content.Server.PDA
         [Dependency] private CartridgeLoaderSystem _cartridgeLoader = default!;
         [Dependency] private InstrumentSystem _instrument = default!;
         [Dependency] private RingerSystem _ringer = default!;
-        [Dependency] private ServerStationSystem _station = default!;
+        [Dependency] private StationSystem _station = default!;
         [Dependency] private StoreSystem _store = default!;
         [Dependency] private IChatManager _chatManager = default!;
         [Dependency] private UserInterfaceSystem _ui = default!;
@@ -149,6 +151,13 @@ namespace Content.Server.PDA
         private void OnLightToggle(EntityUid uid, PdaComponent pda, LightToggleEvent args)
         {
             pda.FlashlightOn = args.IsOn;
+            UpdatePdaUi(uid, pda);
+        }
+
+        public void SetOwner(EntityUid uid, PdaComponent pda, EntityUid owner, string ownerName)
+        {
+            pda.OwnerName = ownerName;
+            pda.PdaOwner = owner;
             UpdatePdaUi(uid, pda);
         }
 
@@ -364,7 +373,7 @@ namespace Content.Server.PDA
 
             if (TryComp(uid, out DeviceNetworkComponent? deviceNetworkComponent))
             {
-                address = deviceNetworkComponent.Address;
+                address = deviceNetworkComponent?.Address;
             }
 
             return address;

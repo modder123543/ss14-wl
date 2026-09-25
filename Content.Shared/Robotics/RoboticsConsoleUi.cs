@@ -1,4 +1,4 @@
-using Content.Shared.DeviceNetwork;
+﻿using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 using Robust.Shared.Utility;
@@ -151,21 +151,12 @@ public partial record struct CyborgControlData
     // WL-Changes-end
 }
 
-/// <summary>
-/// Disables a borg when received.
-/// </summary>
-public partial record struct RoboticsCyborgDisablePayload : INetworkPayload;
-
-/// <summary>
-/// Destroys a borg when received.
-/// </summary>
-public partial record struct RoboticsCyborgDestroyPayload : INetworkPayload;
-
-/// <summary>
-/// A wrapper for <see cref="CyborgControlData"/>
-/// </summary>
-public partial record struct RoboticsCyborgDataPayload : INetworkPayload
+public static class RoboticsConsoleConstants
 {
-    [DataField]
-    public CyborgControlData Data;
+    // broadcast by cyborgs on Robotics Console frequency
+    public const string NET_CYBORG_DATA = "cyborg-data";
+
+    // sent by robotics console to cyborgs on Cyborg Control frequency
+    public const string NET_DISABLE_COMMAND = "cyborg-disable";
+    public const string NET_DESTROY_COMMAND = "cyborg-destroy";
 }

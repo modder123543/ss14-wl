@@ -53,7 +53,6 @@ public sealed partial class TTSSystem : EntitySystem
     private readonly HashSet<NetEntity> _playingEntities = new();
     private readonly Dictionary<NetEntity, Queue<PlayTTSEvent>> _entityQueues = new();
     private TTSVoiceEffectPreset _voiceEffectPreset = TTSVoiceEffectPreset.None;
-    private bool _ttsEnabled;
     private int _fileIdx = 0;
 
     public override void Initialize()
@@ -66,7 +65,6 @@ public sealed partial class TTSSystem : EntitySystem
         }
 
         _sawmill = Logger.GetSawmill("tts");
-        _cfg.OnValueChanged(CCCVars.TTSEnabled, OnTtsEnabledChanged, true);
         _cfg.OnValueChanged(CCCVars.TTSVoiceEffect, OnVoiceEffectChanged, true);
         _cfg.OnValueChanged(CCCVars.TTSRadioVolume, OnRadioVolumeChanged, true);
         _cfg.OnValueChanged(CCCVars.TTSVolume, OnVolumeChanged, true);
@@ -79,7 +77,6 @@ public sealed partial class TTSSystem : EntitySystem
     {
         base.Shutdown();
 
-        _cfg.UnsubValueChanged(CCCVars.TTSEnabled, OnTtsEnabledChanged);
         _cfg.UnsubValueChanged(CCCVars.TTSVoiceEffect, OnVoiceEffectChanged);
         _cfg.UnsubValueChanged(CCCVars.TTSRadioVolume, OnRadioVolumeChanged);
         _cfg.UnsubValueChanged(CCCVars.TTSVolume, OnVolumeChanged);
@@ -90,21 +87,20 @@ public sealed partial class TTSSystem : EntitySystem
         ShutdownEffects();
     }
 
-    private void OnTtsEnabledChanged(bool value)
-    {
-        _ttsEnabled = value;
-
-        if (!value)
-        {
-            ShutdownEffects();
-        }
-    }
-
     private void OnVoiceEffectChanged(int newValue)
     {
         _voiceEffectPreset = (TTSVoiceEffectPreset)newValue;
 
-        ShutdownVoiceEffect();
+        if (_cachedVoiceEffectEntity != null)
+        {
+            if (!TerminatingOrDeleted(_cachedVoiceEffectEntity.Value))
+                Del(_cachedVoiceEffectEntity.Value);
+
+            _cachedVoiceEffectEntity = null;
+        }
+
+        if (_voiceEffectPreset != TTSVoiceEffectPreset.None)
+            EnsureVoiceEffectInitialized();
     }
 
     private void OnVolumeChanged(float value)
@@ -132,9 +128,6 @@ public sealed partial class TTSSystem : EntitySystem
 
     private void OnPlayTTS(PlayTTSEvent ev)
     {
-        if (!_ttsEnabled)
-            return;
-
         // It will stop clogging up your memory if you turn off one of the sliders to 0
         if (ev.IsRadio && _radioVolume <= 0)
         {

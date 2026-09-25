@@ -31,15 +31,15 @@ public sealed partial class MassHallucinationsRule : StationEventSystem<MassHall
         }
     }
 
-    protected override void Ended(Entity<MassHallucinationsRuleComponent> rule, ref GameRuleEndedEvent args)
+    protected override void Ended(EntityUid uid, MassHallucinationsRuleComponent component, GameRuleComponent gameRule, GameRuleEndedEvent args)
     {
-        base.Ended(rule, ref args);
+        base.Ended(uid, component, gameRule, args);
 
-        foreach (var ent in rule.Comp.AffectedEntities)
+        foreach (var ent in component.AffectedEntities)
         {
             RemComp<ParacusiaComponent>(ent);
         }
 
-        rule.Comp.AffectedEntities.Clear();
+        component.AffectedEntities.Clear();
     }
 }

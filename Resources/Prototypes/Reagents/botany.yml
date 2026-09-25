@@ -96,7 +96,7 @@
       amount: 0.1
     - !type:PlantChangeTraits
       trait: PlantTraitKudzu
-      type: Remove
+      remove: true
   metabolisms:
     Bloodstream:
       effects:

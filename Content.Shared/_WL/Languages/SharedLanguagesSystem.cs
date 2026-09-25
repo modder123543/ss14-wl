@@ -19,7 +19,7 @@ namespace Content.Shared._WL.Languages;
 public abstract partial class SharedLanguagesSystem : EntitySystem
 {
     [Dependency] private IPrototypeManager _prototype = default!;
-    [Dependency] private GameTicker _ticker = default!;
+    [Dependency] private SharedGameTicker _ticker = default!;
     [Dependency] private IEntityManager _ent = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedChatSystem _chat = default!;
@@ -256,10 +256,7 @@ public abstract partial class SharedLanguagesSystem : EntitySystem
             return false;
 
         if (!TryComp<LanguagesComponent>(source, out var comp))
-        {
-            newMessage = _chat.SanitizeMessageCapital(message.Trim()) ?? string.Empty;
-            return !string.IsNullOrWhiteSpace(newMessage);
-        }
+            return false;
 
         ProtoId<LanguagePrototype>? languageId;
 
